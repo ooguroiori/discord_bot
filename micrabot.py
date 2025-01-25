@@ -4,6 +4,22 @@ from discord.ext import commands
 import boto3
 from dotenv import load_dotenv
 import time
+from flask import Flask
+from threading import Thread
+
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "I'm alive"
+
+def run():
+    app.run(host='0.0.0.0', port=8080)
+
+def keep_alive():
+    t = Thread(target=run)
+    t.start()
+
 
 # .envファイルを読み込む
 load_dotenv()
