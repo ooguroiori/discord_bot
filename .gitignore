@@ -1,2 +1,4 @@
 # envファイルをGitで管理しない
 .env
+python
+layer.zip
