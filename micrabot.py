@@ -16,7 +16,7 @@ INSTANCE_ID = os.getenv('AWS_INSTANCE_ID')
 ec2 = boto3.client('ec2', region_name=AWS_REGION)
 
 # Discordボット設定
-intents = discord.Intents.default()
+intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 @bot.event
