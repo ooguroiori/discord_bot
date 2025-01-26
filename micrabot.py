@@ -7,6 +7,32 @@ import time
 from flask import Flask
 from threading import Thread
 
+# Flask サーバーのセットアップ
+app = Flask('')
+
+@app.route('/')
+def home():
+    return "Bot is running!"
+
+def run():
+    app.run(host='0.0.0.0', port=8080)
+
+# Flask サーバーを別スレッドで実行
+server = threading.Thread(target=run)
+server.start()
+
+# Discord Bot のセットアップ
+TOKEN = "YOUR_DISCORD_BOT_TOKEN"
+
+intents = discord.Intents.default()
+client = discord.Client(intents=intents)
+
+@client.event
+async def on_ready():
+    print(f'Logged in as {client.user}')
+
+client.run(TOKEN)
+
 # .envファイルを読み込む
 load_dotenv()
 
