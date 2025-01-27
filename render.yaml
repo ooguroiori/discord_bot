@@ -1,0 +1,25 @@
+# Exported from Render on 2025-01-26T04:01:41Z
+services:
+- type: worker
+  name: discord_bot
+  runtime: python
+  repo: https://github.com/ooguroiori/discord_bot
+  branch: feature/bot_serverUp
+  plan: free
+  envVars:
+  - key: AWS_SECRET_ACCESS_KEY
+    sync: false
+  - key: AWS_ACCESS_KEY_ID
+    sync: false
+  - key: AWS_INSTANCE_ID
+    sync: false
+  - key: AWS_REGION
+    sync: false
+  - key: DISCORD_MINECRAFT_TOKEN
+    sync: false
+  - key: DISCORD_TOKEN
+    sync: false
+  region: oregon
+  buildCommand: pip install -r requirements.txt
+  startCommand: python micrabot.py
+version: "1"
