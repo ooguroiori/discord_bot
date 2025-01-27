@@ -1,0 +1,15 @@
+name: Trigger Render Deploy
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"  # 15分ごとに実行
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render Deployment
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: |
+          curl -X POST "$RENDER_DEPLOY_HOOK"
