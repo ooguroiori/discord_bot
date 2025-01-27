@@ -1,15 +1,25 @@
-name: Trigger Render Deploy
+name: Trigger Render Deployment
 
 on:
   schedule:
-    - cron: "*/15 * * * *"  # 15分ごとに実行
+    - cron: '*/15 * * * *' # 15分おき
 
 jobs:
-  deploy:
+  trigger-deployment:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Trigger Render Deployment
         env:
           RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
         run: |
-          curl -X POST "$RENDER_DEPLOY_HOOK"
+          echo "Starting deployment to Render..."
+          RESPONSE=$(curl -X POST -s -o /dev/null -w "%{http_code}" "$RENDER_DEPLOY_HOOK")
+          if [ "$RESPONSE" -eq 200 ]; then
+            echo "Deployment to Render was successful."
+          else
+            echo "Deployment to Render failed with HTTP status $RESPONSE."
+            exit 1
+          fi
