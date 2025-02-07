@@ -3,22 +3,7 @@ import discord
 from discord.ext import commands
 import boto3
 from dotenv import load_dotenv
-from flask import Flask
-import threading
 import time
-
-# Flask サーバーのセットアップ
-app = Flask('')
-
-@app.route('/')
-def home():
-    return "Bot is running!"
-
-def run():
-    app.run(host='0.0.0.0', port=8080)
-
-# Flask サーバーを別スレッドで実行
-threading.Thread(target=run).start()
 
 # .envファイルを読み込む
 load_dotenv()

@@ -1,25 +1,42 @@
-name: Trigger Render Deployment
+name: Micrabotデプロイ
 
 on:
+  workflow_dispatch:  # 手動実行用
+  push:
   schedule:
-    - cron: '*/15 * * * *' # 15分おき
+    - cron: '0 */6 * * *'  # 6時間ごとに実行
 
 jobs:
-  trigger-deployment:
+  deploy:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Checkout code
+      - name: コードのチェックアウト
         uses: actions/checkout@v3
-
-      - name: Trigger Render Deployment
+      
+      - name: Pythonのセットアップ
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          
+      - name: 依存関係のインストール
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+        
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-dev libasound2-dev portaudio19-dev libportaudio2 libportaudiocpp0 ffmpeg
+          
+      - name: Micrabotの実行
         env:
           RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_INSTANCE_ID: ${{ secrets.AWS_INSTANCE_ID }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          DISCORD_MINECRAFT_TOKEN: ${{ secrets.DISCORD_MINECRAFT_TOKEN }}
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
         run: |
-          echo "Starting deployment to Render..."
-          RESPONSE=$(curl -X POST -s -o /dev/null -w "%{http_code}" "$RENDER_DEPLOY_HOOK")
-          if [ "$RESPONSE" -eq 200 ]; then
-            echo "Deployment to Render was successful."
-          else
-            echo "Deployment to Render failed with HTTP status $RESPONSE."
-            exit 1
-          fi
+          python micrabot.py
