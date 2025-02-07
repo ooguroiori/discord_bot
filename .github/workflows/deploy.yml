@@ -2,6 +2,7 @@ name: Micrabotデプロイ
 
 on:
   workflow_dispatch:  # 手動実行用
+  push:
   schedule:
     - cron: '0 */6 * * *'  # 6時間ごとに実行
 
