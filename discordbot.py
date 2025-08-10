@@ -27,7 +27,7 @@ async def on_message(message):
     # 受信したメッセージの内容をログに出力
     print(f"受信メッセージ: {message.content}")
 
-    # 「play (URL)」というメッセージを受け取った場合
+    # 「play (URL)」というメッセージを受け取った場合の処理
     if message.content.lower().startswith('play '):
         # 「play 」以降のURL部分を取得
         url = message.content[len('play '):].strip()
